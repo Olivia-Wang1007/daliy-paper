@@ -1,0 +1,138 @@
+<template>
+  <div class="box">
+    <div class="txt">
+      <p class="ptab">用户名：03920299</p>
+      <br />
+      <p class="ptab">角色：组长</p>
+      <br />
+    </div>
+    <br />
+    <Button
+      type="primary"
+      @click="onChangeCode"
+      class="ptab"
+      id="btn1"
+      v-if="changeCode == 'no'"
+      >修改</Button
+    >
+    <div class="form" v-else>
+      <Form
+        ref="formCustom"
+        :model="formCustom"
+        :rules="ruleCustom"
+        :label-width="80"
+      >
+        <FormItem label="旧密码：" prop="passwd">
+          <Input type="password" v-model="formCustom.passwd"></Input>
+        </FormItem>
+        <FormItem label="新的密码" prop="passwdCheck">
+          <Input type="password" v-model="formCustom.passwdCheck"></Input>
+        </FormItem>
+        <FormItem label="确认密码" prop="age">
+          <Input type="text" v-model="formCustom.age" number></Input>
+        </FormItem>
+        <FormItem>
+          <Button @click="handleReset('formCustom')" style="margin-left: 8px"
+            >取消</Button
+          >
+          <Button type="primary" @click="handleSubmit('formCustom')"
+            >确认</Button
+          >
+        </FormItem>
+      </Form>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Please enter your password"));
+      } else {
+        if (this.formCustom.passwdCheck !== "") {
+          // 对第二个密码框单独验证
+          this.$refs.formCustom.validateField("passwdCheck");
+        }
+        callback();
+      }
+    };
+    const validatePassCheck = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Please enter your password again"));
+      } else if (value !== this.formCustom.passwd) {
+        callback(new Error("The two input passwords do not match!"));
+      } else {
+        callback();
+      }
+    };
+    const validateAge = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("Age cannot be empty"));
+      }
+      // 模拟异步验证效果
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error("Please enter a numeric value"));
+        } else {
+          if (value < 18) {
+            callback(new Error("Must be over 18 years of age"));
+          } else {
+            callback();
+          }
+        }
+      }, 1000);
+    };
+
+    return {
+      changeCode: "no",
+      formCustom: {
+        passwd: "",
+        passwdCheck: "",
+        age: "",
+      },
+      ruleCustom: {
+        passwd: [{ validator: validatePass, trigger: "blur" }],
+        passwdCheck: [{ validator: validatePassCheck, trigger: "blur" }],
+        age: [{ validator: validateAge, trigger: "blur" }],
+      },
+    };
+  },
+  methods: {
+    onChangeCode() {
+      this.changeCode = "yes";
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$Message.success("Success!");
+        } else {
+          this.$Message.error("Fail!");
+        }
+      });
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
+    },
+  },
+};
+</script>
+<style scoped>
+#btn1 {
+  margin-left: 80px;
+}
+.txt {
+  float: left;
+}
+.form {
+  float: left;
+}
+.box {
+  height: 500px;
+  width: 250px;
+}
+.ptab {
+  float: left;
+  margin-bottom: 20px;
+}
+</style>

@@ -3,19 +3,21 @@
     <Button type="primary" @click="modal3 = true">新建</Button>
 
     <div>
+      <!-- 表格 -->
       <Table border :columns="columns12" :data="data6">
         <template slot-scope="{ row }" slot="name">
           <strong>{{ row.name }}</strong>
         </template>
         <template slot-scope="{ row, index }" slot="action">
           <!-- 人员设置 -->
-          <Button
-            type="info"
+         <Button
+            type="primary"
             size="small"
             style="margin-right: 5px"
-            @click="show(index)"
-            >修改</Button
+            @click="show1(index)"
+            >人员设置</Button
           >
+          <!-- 修改创建弹窗 -->
           <Modal
             v-model="modal2"
             title="修改/创建"
@@ -49,13 +51,14 @@
               </div>
             </div>
           </Modal>
-          <!-- 修改 -->
+          <!-- 人员设置 -->
+         
           <Button
-            type="primary"
+            type="info"
             size="small"
             style="margin-right: 5px"
-            @click="show1(index)"
-            >人员设置</Button
+            @click="show(index)"
+            >修改</Button
           >
           <Modal
             v-model="modal3"
@@ -109,29 +112,23 @@ export default {
           slot: "name",
         },
         {
-          title: "Age",
-          key: "age",
-        },
-        {
           title: "Address",
           key: "address",
         },
         {
           title: "Action",
           slot: "action",
-          width: 150,
+          className: "colwidth",
           align: "center",
         },
       ],
       data6: [
         {
           name: "John Brown",
-          age: 18,
           address: "New York No. 1 Lake Park",
         },
         {
           name: "Jim Green",
-          age: 24,
           address: "London No. 1 Lake Park",
         },
       ],
@@ -198,5 +195,8 @@ export default {
 }
 #label {
   margin-left: 20px;
+}
+.colwidth {
+  width: 100px;
 }
 </style>

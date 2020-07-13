@@ -22,15 +22,16 @@
         :rules="ruleCustom"
         :label-width="80"
       >
-        <FormItem label="旧密码：" prop="passwd">
-          <Input type="password" v-model="formCustom.passwd"></Input>
-        </FormItem>
-        <FormItem label="新的密码" prop="passwdCheck">
-          <Input type="password" v-model="formCustom.passwdCheck"></Input>
-        </FormItem>
-        <FormItem label="确认密码" prop="age">
+        <FormItem label="旧密码：" prop="age">
           <Input type="text" v-model="formCustom.age" number></Input>
         </FormItem>
+        <FormItem label="新的密码:" prop="passwd">
+          <Input type="password" v-model="formCustom.passwd"></Input>
+        </FormItem>
+        <FormItem label="确认密码:" prop="passwdCheck">
+          <Input type="password" v-model="formCustom.passwdCheck"></Input>
+        </FormItem>
+
         <FormItem>
           <Button @click="handleReset('formCustom')" style="margin-left: 8px"
             >取消</Button
@@ -41,6 +42,7 @@
         </FormItem>
       </Form>
     </div>
+   
   </div>
 </template>
 <script>
@@ -113,6 +115,7 @@ export default {
     },
     handleReset(name) {
       this.$refs[name].resetFields();
+      this.changeCode = "no";
     },
   },
 };

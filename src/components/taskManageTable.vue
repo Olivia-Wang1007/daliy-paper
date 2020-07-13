@@ -30,6 +30,50 @@
               </Form>
             </div>
           </Modal>
+          <!-- 任务设置 -->
+          <Button
+            type="info"
+            size="small"
+            style="margin-right: 5px"
+            @click="show(index)"
+            >任务设置</Button
+          >
+          <Modal
+            v-model="modal2"
+            title="人员设置"
+            @on-ok="ok"
+            @on-cancel="cancel"
+          >
+            <!-- 更新进度 -->
+            <Button
+              type="info"
+              size="small"
+              style="margin-right: 5px"
+              @click="show(index)"
+              >更新进度</Button
+            >
+            <div id="myform">
+              <Form :model="formItem" :label-width="60">
+                <FormItem label="姓名">
+                  <Input v-model="formItem.input"></Input>
+                </FormItem>
+              </Form>
+            </div>
+          </Modal>
+          <Modal
+            v-model="modal2"
+            title="人员设置"
+            @on-ok="ok"
+            @on-cancel="cancel"
+          >
+            <div id="myform">
+              <Form :model="formItem" :label-width="60">
+                <FormItem label="姓名">
+                  <Input v-model="formItem.input"></Input>
+                </FormItem>
+              </Form>
+            </div>
+          </Modal>
           <!-- 修改 -->
           <Button
             type="primary"
@@ -66,7 +110,7 @@ export default {
       modal1: false,
       modal2: false,
       modal3: false,
-       formItem: {
+      formItem: {
         input: "",
         select: "",
         radio: "male",
@@ -93,7 +137,7 @@ export default {
         {
           title: "Action",
           slot: "action",
-          width: 150,
+          className: "colwidth",
           align: "center",
         },
       ],
@@ -142,5 +186,8 @@ export default {
 .btns {
   margin-right: 700px;
   margin-bottom: 20px;
+}
+.colwidth {
+  width: 200px;
 }
 </style>

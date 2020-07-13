@@ -1,5 +1,5 @@
 {
-  "name": "notebook",
+  "name": "daily-paper",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -50,7 +50,14 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {"vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]}
+    "rules": {
+      "vue/no-parsing-error": [
+        2,
+        {
+          "x-invalid-end-tag": false
+        }
+      ]
+    }
   },
   "browserslist": [
     "> 1%",

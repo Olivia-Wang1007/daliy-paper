@@ -1,4 +1,4 @@
-# notebook
+# daily-paper
 
 ## Project setup
 ```

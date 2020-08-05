@@ -10,7 +10,7 @@
         </template>
         <template slot-scope="{ row, index }" slot="action">
           <!-- 人员设置 -->
-         <Button
+          <Button
             type="primary"
             size="small"
             style="margin-right: 5px"
@@ -25,7 +25,7 @@
             @on-cancel="cancel"
           >
             <div id="myform">
-              <Form :model="formItem" :label-width="60" inline="true">
+              <Form :model="formItem" :label-width="60" inline:true>
                 <FormItem label="组名称">
                   <Input
                     v-model="formItem.input"
@@ -52,7 +52,7 @@
             </div>
           </Modal>
           <!-- 人员设置 -->
-         
+
           <Button
             type="info"
             size="small"
@@ -108,15 +108,15 @@ export default {
       },
       columns12: [
         {
-          title: "Name",
+          title: "组",
           slot: "name",
         },
         {
-          title: "Address",
-          key: "address",
+          title: "类型",
+          key: "type",
         },
         {
-          title: "Action",
+          title: "操作",
           slot: "action",
           className: "colwidth",
           align: "center",
@@ -142,21 +142,18 @@ export default {
           key: "age",
         },
       ],
-      data1: [
-        {
-          name: "John Brown",
-          age: 18,
-          date: "2016-10-03",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          date: "2016-10-01",
-        },
-      ],
+      data1: [],
     };
   },
+  created() {
+    this.getGroupList();
+  },
   methods: {
+    getGroupList() {
+      this.$http.get(this.$api.getGroupList.url).then((res) => {
+        this.data6 = res.groups;
+      });
+    },
     show() {
       this.modal2 = true;
       // this.$Modal.info({

@@ -34,7 +34,7 @@
       </div>
     </Modal>
     <!-- 表格区域 -->
-    <Table stripe :columns="columns1" :data="data1" border>
+    <Table stripe :columns="columns1" :data="userList" border>
       <template slot-scope="{ row, index }" slot="action">
         <!-- 人员设置 -->
         <Button
@@ -108,53 +108,36 @@ export default {
       modal1: false,
       columns1: [
         {
-          title: "Name",
+          title: "ID",
+          key: "id",
+        },
+        {
+          title: "用户名",
+          key: "user_name",
+        },
+        {
+          title: "姓名",
           key: "name",
         },
         {
-          title: "Age",
-          key: "age",
-        },
-        {
-          title: "Address",
-          key: "address",
-        },
-                {
           title: "Action",
           slot: "action",
           className: "colwidth",
           align: "center",
         },
       ],
-      data1: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01",
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02",
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04",
-        },
-      ],
+      userList: [],
     };
   },
+  created() {
+    this.getUserList();
+  },
   methods: {
+    getUserList() {
+      this.$http.get(this.$api.getUsers.url).then((res) => {
+        this.userList = res.users;
+      });
+    },
     ok() {
       this.$Message.info("Clicked ok");
     },
@@ -176,7 +159,7 @@ export default {
       // });
     },
     remove(index) {
-      this.data6.splice(index, 1);
+      this.userList.splice(index, 1);
     },
   },
 };

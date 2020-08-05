@@ -2,7 +2,12 @@
   <div class="home">
     <p id="title">Daily Paper</p>
     <div id="mediumbox">
-      <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+      <Form
+        ref="formInline"
+        :model="formInline"
+        :rules="ruleInline"
+        inline:true
+      >
         <FormItem prop="user">
           <Input type="text" v-model="formInline.user" placeholder="Username">
             <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -19,11 +24,7 @@
         </FormItem>
         <br />
         <FormItem>
-          <router-link to="/HomePage/HomePage"
-            ><Button type="primary" @click="handleSubmit('formInline')"
-              >登陆</Button
-            ></router-link
-          >
+          <Button type="primary" @click="onLogin">登陆</Button>
         </FormItem>
       </Form>
     </div>
@@ -35,6 +36,7 @@ export default {
   name: "Home",
   data() {
     return {
+      userInfo: "",
       formInline: {
         user: "",
         password: "",
@@ -72,6 +74,26 @@ export default {
           this.$Message.error("Fail!");
         }
       });
+    },
+    onLogin() {
+      let that=this;
+      if (that.formInline.username === "" || that.formInline.password === "") {
+        alert("账号或密码不能为空");
+      } else {
+        that.$http.post(that.$api.postLogin.url).then((res) => {
+          if (
+            that.formInline.user == "03920159" &&
+            that.formInline.password == "e10adc3949ba59abbe56e057f20f883"
+          ) {
+            that.userInfo = res;
+            that.$Message.success("登陆成功!");
+            that.$router.push("/HomePage/HomePage");
+          } else {
+            that.$Message.error("账号或密码错误!");
+            //console.log(that.formInline.user)
+          }
+        });
+      }
     },
   },
 };

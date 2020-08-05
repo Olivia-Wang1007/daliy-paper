@@ -7,7 +7,7 @@
         <template slot-scope="{ row }" slot="name">
           <strong>{{ row.name }}</strong>
         </template>
-        <template slot-scope="{ row, index }" slot="action">
+        <template slot-scope="{ row, index }" slot="operation">
           <!-- 人员设置 -->
           <Button
             type="info"
@@ -44,14 +44,6 @@
             @on-ok="ok"
             @on-cancel="cancel"
           >
-            <!-- 更新进度 -->
-            <Button
-              type="info"
-              size="small"
-              style="margin-right: 5px"
-              @click="show(index)"
-              >更新进度</Button
-            >
             <div id="myform">
               <Form :model="formItem" :label-width="60">
                 <FormItem label="姓名">
@@ -60,9 +52,17 @@
               </Form>
             </div>
           </Modal>
+          <!-- 更新进度 -->
+          <Button
+            type="info"
+            size="small"
+            style="margin-right: 5px"
+            @click="show(index)"
+            >更新进度</Button
+          >
           <Modal
             v-model="modal2"
-            title="人员设置"
+            title="更新进度"
             @on-ok="ok"
             @on-cancel="cancel"
           >
@@ -123,39 +123,34 @@ export default {
       },
       columns12: [
         {
-          title: "Name",
+          title: "名称",
           slot: "name",
         },
         {
-          title: "Age",
-          key: "age",
+          title: "类型",
+          key: "type",
         },
         {
-          title: "Address",
-          key: "address",
-        },
-        {
-          title: "Action",
-          slot: "action",
+          title: "操作",
+          slot: "operation",
           className: "colwidth",
           align: "center",
         },
       ],
       data6: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-        },
+
       ],
     };
   },
+    created() {
+    this.getTaskList();
+  },
   methods: {
+        getTaskList() {
+      this.$http.get(this.$api.getTaskList.url).then((res) => {
+        this.data6 = res.groups;
+      });
+    },
     show() {
       this.modal2 = true;
       // this.$Modal.info({
@@ -188,6 +183,6 @@ export default {
   margin-bottom: 20px;
 }
 .colwidth {
-  width: 200px;
+  width: 450px;
 }
 </style>

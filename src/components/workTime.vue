@@ -104,6 +104,7 @@
   </div>
 </template>
 <script>
+import { getTask } from "@/apis/work-time.js";
 export default {
   data() {
     return {
@@ -131,6 +132,14 @@ export default {
           key: "type",
         },
         {
+          title: "状态",
+          key: "status",
+        },
+        {
+          title: "所属项目",
+          key: "belongs_project_id",
+        },
+        {
           title: "操作",
           slot: "operation",
           className: "colwidth",
@@ -144,7 +153,12 @@ export default {
     this.getTaskList();
   },
   methods: {
-    getTaskList() {},
+    getTaskList() {
+      getTask().then((res) => {
+        // console.log(res);
+        this.data6 = res.data.missions;
+      });
+    },
     show() {
       this.modal2 = true;
       // this.$Modal.info({

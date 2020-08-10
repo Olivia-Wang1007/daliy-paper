@@ -1,20 +1,41 @@
 <template>
   <div class="box">
-    <div class="txt">
-      <p class="ptab">用户名：03920299</p>
-      <br />
-      <p class="ptab">角色：组长</p>
-      <br />
+    <div>
+      <Form
+        ref="formCustom"
+        :model="formCustom"
+        :rules="ruleCustom"
+        :label-width="80"
+      >
+        <FormItem label="ID：">
+          <div class="txt">aa-03920159</div>
+        </FormItem>
+        <FormItem label="用户名:">
+          <div class="txt">03920159</div>
+        </FormItem>
+        <FormItem label="姓名:">
+          <div class="txt">陈熹伟</div>
+        </FormItem>
+        <FormItem label="角色:">
+          <div class="txt">组长</div>
+        </FormItem>
+      </Form>
     </div>
-    <br />
-    <Button
-      type="primary"
-      @click="onChangeCode"
-      class="ptab"
-      id="btn1"
-      v-if="changeCode == 'no'"
-      >修改</Button
-    >
+    <div v-if="changeCode == 'no'">
+      <Form
+        ref="formCustom"
+        :model="formCustom"
+        :rules="ruleCustom"
+        :label-width="80"
+      >
+        <FormItem label="密码">
+          <Button type="primary" @click="onChangeCode" class="ptab" id="btn1"
+            >修改</Button
+          >
+        </FormItem>
+      </Form>
+    </div>
+
     <div class="form" v-else>
       <Form
         ref="formCustom"
@@ -23,9 +44,9 @@
         :label-width="80"
       >
         <FormItem label="旧密码：" prop="age">
-          <Input type="text" v-model="formCustom.age" number></Input>
+          <Input type="password" v-model="formCustom.age" number></Input>
         </FormItem>
-        <FormItem label="新的密码:" prop="passwd">
+        <FormItem label="新密码:" prop="passwd">
           <Input type="password" v-model="formCustom.passwd"></Input>
         </FormItem>
         <FormItem label="确认密码:" prop="passwdCheck">
@@ -33,7 +54,7 @@
         </FormItem>
 
         <FormItem>
-          <Button @click="handleReset('formCustom')" style="margin-left: 8px"
+          <Button @click="handleReset('formCustom')" style="margin-right: 13px"
             >取消</Button
           >
           <Button type="primary" @click="handleSubmit('formCustom')"
@@ -42,10 +63,10 @@
         </FormItem>
       </Form>
     </div>
-   
   </div>
 </template>
 <script>
+import { postLogin } from "@/utils/api.js";
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -87,6 +108,7 @@ export default {
     };
 
     return {
+      userInfo: [],
       changeCode: "no",
       formCustom: {
         passwd: "",
@@ -100,7 +122,21 @@ export default {
       },
     };
   },
+  created() {
+    this.onLogin();
+  },
   methods: {
+    onLogin() {
+      postLogin().then((res) => {
+        this.userInfo = res.user;
+        // console.log(this.userInfo);
+      });
+      this.increment()
+    },
+    increment() {
+      this.$store.commit("increment");
+      console.log(this.$store.state.count);
+    },
     onChangeCode() {
       this.changeCode = "yes";
     },
@@ -135,7 +171,8 @@ export default {
   width: 250px;
 }
 .ptab {
-  float: left;
-  margin-bottom: 20px;
+  /* float: left; */
+  /* margin-bottom: 20px; */
+  margin-left: 10px;
 }
 </style>

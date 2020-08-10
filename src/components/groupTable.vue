@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Button type="primary" @click="modal3 = true">新建</Button>
+    <div class="btn">
+      <Button type="primary" @click="onCreate" class="createBtn">创建</Button>
+    </div>
 
     <div>
       <!-- 表格 -->
@@ -19,9 +21,9 @@
           >
           <!-- 修改创建弹窗 -->
           <Modal
-            v-model="modal2"
+            v-model="modal3"
             title="修改/创建"
-            @on-ok="ok"
+            @on-ok="onCreateGroup"
             @on-cancel="cancel"
           >
             <div id="myform">
@@ -43,16 +45,14 @@
               </Form>
               <label for="mylist" id="label">类型</label>
               <div id="mylist">
-                <List header="Header" footer="Footer" border size="small">
-                  <ListItem>This is a piece of text.</ListItem>
-                  <ListItem>This is a piece of text.</ListItem>
-                  <ListItem>This is a piece of text.</ListItem>
-                </List>
+                <Radio v-model="single1">实体组</Radio>
+                <br />
+                <Radio v-model="single2">自建组</Radio>
               </div>
             </div>
           </Modal>
-          <!-- 人员设置 -->
 
+          <!-- 人员设置弹窗 -->
           <Button
             type="info"
             size="small"
@@ -61,17 +61,21 @@
             >修改</Button
           >
           <Modal
-            v-model="modal3"
-            title="修改/创建"
+            v-model="modal2"
+            title="人员设置"
             @on-ok="ok"
             @on-cancel="cancel"
           >
             <div id="myform">
-              <Form :model="formItem" :label-width="60">
-                <FormItem label="姓名">
-                  <Input v-model="formItem.input"></Input>
-                </FormItem>
-              </Form>
+              <div class="header">
+                <Form :model="formItem" :label-width="60">
+                  <FormItem label="查找">
+                    <Input v-model="formItem.input"></Input>
+                  </FormItem>
+                </Form>
+                <Button type="primary">添加</Button>
+              </div>
+
               <Table
                 stripe
                 border
@@ -89,12 +93,15 @@
   </div>
 </template>
 <script>
+import { getGroup, postNewGroup } from "@/apis/group-manage.js";
 export default {
   data() {
     return {
       modal1: false,
       modal2: false,
       modal3: false,
+      single1: false,
+      single2: false,
       formItem: {
         input: "",
         select: "",
@@ -108,6 +115,10 @@ export default {
       },
       columns12: [
         {
+          title: "ID",
+          key: "id",
+        },
+        {
           title: "组",
           slot: "name",
         },
@@ -116,29 +127,28 @@ export default {
           key: "type",
         },
         {
+          title: "创建者ID",
+          key: "creater_user_id",
+        },
+        {
           title: "操作",
           slot: "action",
           className: "colwidth",
           align: "center",
         },
       ],
-      data6: [
-        {
-          name: "John Brown",
-          address: "New York No. 1 Lake Park",
-        },
-        {
-          name: "Jim Green",
-          address: "London No. 1 Lake Park",
-        },
-      ],
+      data6: [],
       columns1: [
         {
-          title: "Name",
+          title: "姓名",
           key: "name",
         },
         {
-          title: "Age",
+          title: "角色",
+          key: "age",
+        },
+        {
+          title: "操作",
           key: "age",
         },
       ],
@@ -149,20 +159,36 @@ export default {
     this.getGroupList();
   },
   methods: {
+    handleSubmit(){},
+    onCreate() {
+      this.modal3 = true;
+    },
+    onCreateGroup() {
+      let params = {
+        creater_user_id: "5e12a2d0-1875-11e8-9264-f7a7d7b45f55",
+        type: 1,
+        name: "开发一组11",
+      };
+      postNewGroup(params).then((res) => {
+        console.log(res.data);
+        this.data6.push(res.data);
+      });
+    },
     getGroupList() {
-      this.$http.get(this.$api.getGroupList.url).then((res) => {
-        this.data6 = res.groups;
+      getGroup().then((res) => {
+        this.data6 = res.data.groups;
       });
     },
     show() {
-      this.modal2 = true;
+      this.modal3 = true;
+
       // this.$Modal.info({
       //   title: "User Info",
       //   content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`,
       // });
     },
     show1() {
-      this.modal3 = true;
+      this.modal2 = true;
       // this.$Modal.info({
       //   title: "User Info",
       //   content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`,
@@ -181,14 +207,30 @@ export default {
 };
 </script>
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.createBtn {
+  float: left;
+}
+.btn {
+  height: 30px;
+  width: 100%;
+  margin-bottom: 20px;
+}
 .btns {
   margin-right: 700px;
   margin-bottom: 20px;
 }
 #mylist {
-  height: 100px;
   overflow-y: auto;
   margin-left: 57px;
+  border: 1px solid #dcdee2;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 88%;
 }
 #label {
   margin-left: 20px;

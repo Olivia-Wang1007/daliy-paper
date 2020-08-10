@@ -19,7 +19,7 @@
           </div>
         </Menu>
       </Header>
-      <Content :style="{ padding: '0 50px' }">
+      <Content :style="{ padding: '20px 50px' }">
         <div style="min-height: 200px;">
           <myTable></myTable>
         </div>
@@ -49,7 +49,7 @@ export default {
   font-size: 17px;
 }
 .layout {
-  margin-top: -60px;
+  margin-top: 0px;
   border: 1px solid #d7dde4;
   background: #f5f7f9;
   position: relative;
